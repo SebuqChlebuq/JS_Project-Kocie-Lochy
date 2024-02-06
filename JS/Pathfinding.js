@@ -52,10 +52,10 @@ function returnPath(stop){
         return previous
 
     while(previous.cameFrom.cameFrom != null){
-        previous.color = 'red';
+        //previous.color = 'red';
         previous = previous.cameFrom;
     }
-    previous.color = 'red';
+    //previous.color = 'red';
     return previous
 }
 

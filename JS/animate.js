@@ -18,6 +18,15 @@ function animateEnemies(){
     }
 }
 
+function animateParticles(){
+    for(let i = 0;i<particles.length; i++){
+        if(particles[i].alpha < 0.1){
+            particles.splice(i,1);
+        }else{
+            particles[i].update();
+        }
+    }
+}
 function animateBullets(){
     for(let i = 0; i < bullets.length; i++)
     {   
@@ -30,9 +39,6 @@ function animateBullets(){
                         tileMap[x][y].x * tileSize, tileMap[x][y].y * tileSize - tileSize, tileMap[x][y].width, tileMap[x][y].height)
                     if(collision){
                         flag = true;
-                        //setTimeout(() => {
-                        //    bullets.splice(i,1);
-                        //}, 0);
                     }
                 } 
             }
@@ -45,7 +51,16 @@ function animateBullets(){
                 flag = true
             }
         if(flag){
-           bullets.splice(i,1); 
+            for(let j = 0;j < 10;j++){
+                let color = 'white'
+                if(bullets[i].image == playerBulletImg) color = "orange"
+                else color = "red"
+
+                particles.push(new Particle(bullets[i].position.x, bullets[i].position.y,
+                    5, color,
+                    {x:(Math.random() - 0.5)*15, y:(Math.random() - 0.5)*15}))
+            }
+            bullets.splice(i,1); 
         }
     }
 }
@@ -155,6 +170,9 @@ function animateTileMap(){
     for(let i = 0;i<bullets.length; i++){
         bullets[i].drawed = false;
     }
+    for(let i = 0;i<particles.length; i++){
+        particles[i].drawed = false;
+    }
     for(let i = 0;i<enemies.length; i++){
         enemies[i].drawed = false;
     }
@@ -173,6 +191,9 @@ function animateTileMap(){
 
         for(let i = 0;i<enemies.length; i++){
             renderOnMap(enemies[i], x)
+        }
+        for(let i = 0;i<particles.length; i++){
+            renderOnMap(particles[i], x)
         }
     }
 }

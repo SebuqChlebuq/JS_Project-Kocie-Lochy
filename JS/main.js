@@ -28,8 +28,10 @@ const keys = {
 const bullets = [];
 const tileMap = [];
 const enemies = [];
+const particles = [];
 
 enemies.push(new Enemy(660,400));
+//enemies.push(new Enemy(100,400));
 
 function circleRect(cx, cy, radius, rx, ry, rw, rh) {
 
@@ -56,7 +58,8 @@ function circleRect(cx, cy, radius, rx, ry, rw, rh) {
 }
 
 const columnImg = new Sprite("Img/Column.png");
-const bulletImg = new Sprite("Img/Bullet.png");
+const playerBulletImg = new Sprite("Img/PlayerBullet.png");
+const enemyBulletImg = new Sprite("Img/EnemyBullet.png");
 const doorImg = new Sprite("Img/Door.png");
 const wallImg = new Sprite("Img/Wall.png");
 const cornerImg = new Sprite("Img/Corner.png");
@@ -72,9 +75,7 @@ function setTileMap(){
     for(let x = 0; x<3; x++){
         tileMap[2+x][8].walkable = false
     }
-    for(let y = 0; y<2; y++){
-        tileMap[2 + y][3+y].walkable = false
-    }
+    
     for(let y = 0; y<5; y++){
         tileMap[8][4+y].walkable = false
     }
@@ -96,11 +97,11 @@ function animate(){
     animatePlayer();
     animateEnemies();
     animateBullets();
+    animateParticles();
 
     animateTileMap();
-    
-    
 }
+
 c.imageSmoothingEnabled = false;
 setTileMap();
 animate();

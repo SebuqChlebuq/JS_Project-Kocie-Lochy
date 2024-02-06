@@ -1,5 +1,5 @@
 class Bullet{
-    constructor(x, y, velocity, speed){
+    constructor(x, y, velocity, speed, bulletImg){
         this.position = {
             x: x,
             y: y

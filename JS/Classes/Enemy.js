@@ -33,28 +33,36 @@ class Enemy{
             x: 0,
             y: 0
         }
-        this.hitBoxSize = this.height/2 -30
+        this.hitBoxSize = this.height/2 - 30
         this.drawed = false;
         
+        this.setShootDelay = 6;
+        this.shootDelay = 0;
+
         this.bodyImg = new Sprite("Img/Enemies/Szczurek/Sczurek_body.png");
         this.weaponImg = new Sprite("Img/Enemies/Szczurek/Sczurek_gun.png");
     }
 
     shoot(){
-        let velocity = {
-            x: Math.cos(this.rad + (Math.random()- 0.5)/2),
-            y: Math.sin(this.rad + (Math.random() - 0.5)/2)
+        if(this.shootDelay < 1){
+            this.shootDelay = this.setShootDelay
+            let velocity = {
+                x: Math.cos(this.rad + (Math.random()- 0.5)/2),
+                y: Math.sin(this.rad + (Math.random() - 0.5)/2)
+            }
+            let speed = 15;
+            let x = this.position.x + this.gunPosition.x + velocity.x * this.gunSize.width/2;
+            let y = this.position.y + this.gunPosition.y + velocity.y * this.gunSize.width/2 - 10; 
+            bullets.push(new Bullet(x, y, velocity, speed, enemyBulletImg));
+            
+            this.pushVelocity.x = -velocity.x * 10;
+            this.pushVelocity.y = -velocity.y * 10;
+            
+            this.weaponPushVelocity.x = -velocity.x * 30;
+            this.weaponPushVelocity.y = -velocity.y * 30;
+        }else{
+            this.shootDelay -= 0.1;
         }
-        let speed = 20 + Math.random()*5;
-        let x = this.position.x + this.gunPosition.x + velocity.x * this.gunSize.width/2;
-        let y = this.position.y + this.gunPosition.y + velocity.y * this.gunSize.width/2 - 10; 
-        bullets.push(new Bullet(x, y, velocity, speed));
-        
-        this.pushVelocity.x = -velocity.x * 10;
-        this.pushVelocity.y = -velocity.y * 10;
-        
-        this.weaponPushVelocity.x = -velocity.x * 30;
-        this.weaponPushVelocity.y = -velocity.y * 30;
     }
     draw(){
         //set center point
@@ -117,8 +125,18 @@ class Enemy{
     update(){
         this.rad = Math.atan2(player.position.y - this.position.y,
             player.position.x - this.position.x);
-            
-        if(Math.sqrt(Math.pow(player.position.y - this.position.y,2) + Math.pow(player.position.x - this.position.x,2)) >= tileSize * 5){
+
+        let isWall = false
+        const rayPoints = dda(this.position.x, this.position.y, player.onTile.x*tileSize, player.onTile.y*tileSize)
+        for(let i = 0; i<rayPoints.length;i++){
+            if(tileMap[parseInt(rayPoints[i].x/tileSize - xShift/2)][parseInt(rayPoints[i].y/tileSize - yShift/2)] !== 'undefined'){
+                if(!tileMap[parseInt(rayPoints[i].x/tileSize - xShift/2)][parseInt(rayPoints[i].y/tileSize - yShift/2)].walkable){
+                    isWall = true
+                }
+            }
+        }
+
+        if(Math.sqrt(Math.pow(player.position.y - this.position.y,2) + Math.pow(player.position.x - this.position.x,2)) >= tileSize * 5 || isWall){
             
             this.moveTo = findPath(tileMap[parseInt(this.position.x/tileSize - xShift/2)][parseInt(this.position.y/tileSize - yShift/2)],
             player.onTile);

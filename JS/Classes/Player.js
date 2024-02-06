@@ -37,7 +37,7 @@ class Player{
         this.weaponImg = new Sprite("Img/Character/Weapon.png");
     }
     shoot(){
-        for(let i = 0; i<1;i++){
+        for(let i = 0; i<5;i++){
             let velocity = {
                 x: Math.cos(this.rad + (Math.random()- 0.5)/2),
                 y: Math.sin(this.rad + (Math.random() - 0.5)/2)
@@ -45,10 +45,10 @@ class Player{
             let speed = 20 + Math.random()*5;
             let x = this.position.x + this.gunPosition.x + velocity.x * this.gunSize.width/2;
             let y = this.position.y + this.gunPosition.y + velocity.y * this.gunSize.width/2 - 10; 
-            bullets.push(new Bullet(x, y, velocity, speed));
+            bullets.push(new Bullet(x, y, velocity, speed, playerBulletImg));
             
-            this.pushVelocity.x = -velocity.x * 10;
-            this.pushVelocity.y = -velocity.y * 10;
+            this.pushVelocity.x = -velocity.x * 20;
+            this.pushVelocity.y = -velocity.y * 20;
             
             this.weaponPushVelocity.x = -velocity.x * 30;
             this.weaponPushVelocity.y = -velocity.y * 30;
@@ -125,11 +125,6 @@ class Player{
         for(let x = 0; x<x_tileNum; x++){   
             for(let y = 0; y<y_tileNum; y++){
                 if(tileMap[x][y].walkable == false){
-                    // collision = CircleRectangleCollision(
-                    //     {position: bullets[i].position, radius: 5},
-                    //     {position: {x: tileMap[x][y].x * tileSize, y: tileMap[x][y].y* tileSize},
-                    //     width: tileMap[x][y].width, height: tileMap[x][y].height});
-
                     let collision1 = circleRect(this.velocity.x + this.position.x+ this.pushVelocity.x, this.position.y, this.hitBoxSize/2 + 20, 
                         tileMap[x][y].x * tileSize, tileMap[x][y].y * tileSize - tileSize, tileMap[x][y].width, tileMap[x][y].height)
                     let collision2 = circleRect(this.position.x, this.velocity.y + this.position.y+ this.pushVelocity.y, this.hitBoxSize/2 + 20, 
@@ -152,7 +147,7 @@ class Player{
             
         }  
         if(!yTouch && this.position.y + this.velocity.y + this.pushVelocity.y > yShift/2 * tileSize &&
-            this.position.y + this.velocity.y + this.pushVelocity.y < canvas.height - yShift/2 * tileSize ){
+            this.position.y + this.velocity.y + this.pushVelocity.y < canvas.height - yShift/2 * tileSize - yShift/4){
 
             this.position.y += this.velocity.y + this.pushVelocity.y;
             
