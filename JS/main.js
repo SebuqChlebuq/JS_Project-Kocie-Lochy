@@ -26,7 +26,10 @@ const keys = {
     d: false
 };
 const bullets = [];
-const tileMap = []
+const tileMap = [];
+const enemies = [];
+
+enemies.push(new Enemy(660,400));
 
 function circleRect(cx, cy, radius, rx, ry, rw, rh) {
 
@@ -62,7 +65,7 @@ function setTileMap(){
     for(let x = 0; x<x_tileNum; x++){   
         tileMap[x] = {}
         for(let y = 0; y<y_tileNum; y++){
-            tileMap[x][y] = new Tile(x+xShift/2, y+yShift/2, tileSize, tileSize, true);
+            tileMap[x][y] = new Tile(x + xShift/2, y + yShift/2, tileSize, tileSize, true);
         }
     }
 
@@ -70,7 +73,7 @@ function setTileMap(){
         tileMap[2+x][8].walkable = false
     }
     for(let y = 0; y<2; y++){
-        tileMap[2][2+y].walkable = false
+        tileMap[2 + y][3+y].walkable = false
     }
     for(let y = 0; y<5; y++){
         tileMap[8][4+y].walkable = false
@@ -84,10 +87,19 @@ function setTileMap(){
 function animate(){
     requestAnimationFrame(animate);
     c.clearRect(0,0, canvas.width, canvas.height);
+    for(let x = 0; x<x_tileNum; x++){
+        for(let y = 0; y<y_tileNum; y++){
+            tileMap[x][y].color = 'rgb(255,255,255,0.1)'
+        }
+    }
+
+    animatePlayer();
+    animateEnemies();
+    animateBullets();
+
+    animateTileMap();
     
-    animateTileMap()
-    animatePlayer()
-    animateBullets()
+    
 }
 c.imageSmoothingEnabled = false;
 setTileMap();

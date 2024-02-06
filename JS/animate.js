@@ -12,6 +12,12 @@ function animatePlayer(){
     player.update();
 }
 
+function animateEnemies(){
+    for(let i = 0;i<enemies.length; i++){
+        enemies[i].update();
+    }
+}
+
 function animateBullets(){
     for(let i = 0; i < bullets.length; i++)
     {   
@@ -73,6 +79,7 @@ function place(object,rotate, translateX, translateY, width, height){
 }
 
 function animateTileMap(){
+    {
     place(doorImg, 0,
         (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, yShift/2 * tileSize/2,
         tileSize*2, yShift/2 * tileSize)
@@ -142,19 +149,30 @@ function animateTileMap(){
             (x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2 ,tileSize/2 + yShift*tileSize/2 + i*tileSize,
             tileSize, xShift/2 * tileSize)
     }
-
+    }
+    
     player.drawed = false;
     for(let i = 0;i<bullets.length; i++){
         bullets[i].drawed = false;
     }
+    for(let i = 0;i<enemies.length; i++){
+        enemies[i].drawed = false;
+    }
 
     for(let x = 0; x<y_tileNum+2; x++){
         for(let y = 0; y<x_tileNum; y++){
-            if(x<y_tileNum) tileMap[y][x].draw()
+            if(x<y_tileNum){
+                tileMap[y][x].draw()
+            }
         }
         renderOnMap(player, x);
+        
         for(let i = 0;i<bullets.length; i++){
             renderOnMap(bullets[i], x);
+        }
+
+        for(let i = 0;i<enemies.length; i++){
+            renderOnMap(enemies[i], x)
         }
     }
 }
