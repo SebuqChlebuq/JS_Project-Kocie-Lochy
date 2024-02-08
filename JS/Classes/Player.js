@@ -30,32 +30,42 @@ class Player{
             x: 0,
             y: 0
         }
+        this.setShootDelay = 10;
+        this.shootDelay = 0;
+
         this.hitBoxSize = this.height/2 -5
         this.drawed = false;
         this.onTile = undefined;
         this.bodyImg = new Sprite("Img/Character/Body.png");
         this.weaponImg = new Sprite("Img/Character/Weapon.png");
+        this.healthMax = 3;
+        this.health = this.healthMax;
     }
     shoot(){
-        for(let i = 0; i<5;i++){
-            let velocity = {
-                x: Math.cos(this.rad + (Math.random()- 0.5)/2),
-                y: Math.sin(this.rad + (Math.random() - 0.5)/2)
+        if(this.shootDelay < 1){
+            this.shootDelay = this.setShootDelay
+            for(let i = 0; i<5;i++){
+                let velocity = {
+                    x: Math.cos(this.rad + (Math.random()- 0.5)/2),
+                    y: Math.sin(this.rad + (Math.random() - 0.5)/2)
+                }
+                let speed = 20 + Math.random()*5;
+                let x = this.position.x + this.gunPosition.x + velocity.x * this.gunSize.width/2;
+                let y = this.position.y + this.gunPosition.y + velocity.y * this.gunSize.width/2 - 10; 
+                bullets.push(new Bullet(x, y, velocity, speed, playerBulletImg, "player"));
+                
+                this.pushVelocity.x = -velocity.x * 20;
+                this.pushVelocity.y = -velocity.y * 20;
+                
+                this.weaponPushVelocity.x = -velocity.x * 30;
+                this.weaponPushVelocity.y = -velocity.y * 30;
             }
-            let speed = 20 + Math.random()*5;
-            let x = this.position.x + this.gunPosition.x + velocity.x * this.gunSize.width/2;
-            let y = this.position.y + this.gunPosition.y + velocity.y * this.gunSize.width/2 - 10; 
-            bullets.push(new Bullet(x, y, velocity, speed, playerBulletImg));
-            
-            this.pushVelocity.x = -velocity.x * 20;
-            this.pushVelocity.y = -velocity.y * 20;
-            
-            this.weaponPushVelocity.x = -velocity.x * 30;
-            this.weaponPushVelocity.y = -velocity.y * 30;
         }
     }
 
     draw(){
+        c.shadowOffsetX = 5;
+        c.shadowOffsetY = 5;
         //set center point
         c.translate(this.position.x, this.position.y);
         
@@ -100,7 +110,8 @@ class Player{
         }
 
 
-
+        c.shadowOffsetX = 0;
+        c.shadowOffsetY = 0;
         //draw hitbox area
         c.beginPath();
         c.lineWidth = 1.2;
@@ -115,7 +126,6 @@ class Player{
     }
 
     update(){
-        ///DO NAPRAWY
         let xTouch = false;
         let yTouch = false;
 
@@ -167,6 +177,10 @@ class Player{
             if(this.idleY < 2 )this.idleAcceleration -= 0.001;
             else this.idleAcceleration += 0.001;
             if(this.idleY < 0) this.idleSwitch = true;
+        }
+
+        if(this.shootDelay >= 1){
+            this.shootDelay -= 0.1;
         }
     }
 }

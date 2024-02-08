@@ -29,32 +29,45 @@ const bullets = [];
 const tileMap = [];
 const enemies = [];
 const particles = [];
+const coins = [];
 
 enemies.push(new Enemy(660,400));
-//enemies.push(new Enemy(100,400));
+enemies.push(new Enemy(800,600));
+
+function Distance(a,b){
+    return Math.sqrt( Math.pow(a,2) + Math.pow(b,2))
+}
 
 function circleRect(cx, cy, radius, rx, ry, rw, rh) {
 
-    // temporary variables to set edges for testing
     let testX = cx;
     let testY = cy;
   
-    // which edge is closest?
     if (cx < rx)         testX = rx;      // test left edge
     else if (cx > rx+rw) testX = rx+rw;   // right edge
     if (cy < ry)         testY = ry;      // top edge
     else if (cy > ry+rh) testY = ry+rh;   // bottom edge
   
-    // get distance from closest edges
     const distX = cx-testX;
     const distY = cy-testY;
     const distance = Math.sqrt( (distX*distX) + (distY*distY) );
   
-    // if the distance is less than the radius, collision!
     if (distance <= radius) {
       return true;
     }
     return false;
+}
+
+function circleCircle(x1,y1, x2,y2, r1,r2) {
+    let radSum = r1 + r2;
+    let xDist = x1 - x2;
+    let yDist = y1 - y2;
+
+    if(radSum >= Distance(xDist, yDist)){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 const columnImg = new Sprite("Img/Column.png");
@@ -63,6 +76,9 @@ const enemyBulletImg = new Sprite("Img/EnemyBullet.png");
 const doorImg = new Sprite("Img/Door.png");
 const wallImg = new Sprite("Img/Wall.png");
 const cornerImg = new Sprite("Img/Corner.png");
+const heartImg = new Sprite("Img/Heart.png");
+const coinImg = new Sprite("Img/Coin.png");
+const enemyMarkImg = new Sprite("Img/EnemyMark.png");
 
 function setTileMap(){
     for(let x = 0; x<x_tileNum; x++){   
@@ -85,8 +101,39 @@ function setTileMap(){
    
 }
 
+let coinsNumber = 0;
+
+function drawMenu(){
+    c.shadowColor = 'black'
+    c.shadowOffsetX = 5;
+    c.shadowOffsetY = 5;
+
+    c.fillStyle = 'white'
+    c.fillRect(20,canvas.height - 135, 20, 120);
+    c.shadowOffsetX = 0;
+    c.shadowOffsetY = 0;
+    c.fillStyle = 'black'
+    c.fillRect(20,canvas.height - 135, 20, player.shootDelay/player.setShootDelay * 120);
+    
+    c.shadowOffsetX = 5;
+    c.shadowOffsetY = 5;
+    for(let i = 0;i<player.health; i++)
+    {
+        heartImg.draw(50 + i*55, canvas.height - 60, 50,42);
+    }
+    coinImg.draw(52, canvas.height - 100,30,35)
+
+    c.fillStyle = 'rgb(255,255,255,1)'
+    c.font = "35px Impact";
+    
+    const padded = (coinsNumber + "").padStart(2, "0");
+    c.fillText(padded, 85, canvas.height - 70);
+    c.shadowOffsetX = 0;
+    c.shadowOffsetY = 0;
+}
+let animationId;
 function animate(){
-    requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
     c.clearRect(0,0, canvas.width, canvas.height);
     for(let x = 0; x<x_tileNum; x++){
         for(let y = 0; y<y_tileNum; y++){
@@ -98,8 +145,11 @@ function animate(){
     animateEnemies();
     animateBullets();
     animateParticles();
+    animateCoins();
 
     animateTileMap();
+
+    drawMenu();
 }
 
 c.imageSmoothingEnabled = false;

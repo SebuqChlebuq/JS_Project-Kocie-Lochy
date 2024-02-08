@@ -27,41 +27,37 @@ function animateParticles(){
         }
     }
 }
+
+function animateCoins(){
+    for(let i = 0; i < coins.length; i++)
+    {   
+        coins[i].update();
+
+        if(Distance(coins[i].position.x - player.position.x, coins[i].position.y - player.position.y) < 200)
+        {
+            let angle = Math.atan2(player.position.y - coins[i].position.y,
+                player.position.x-coins[i].position.x);
+            
+            coins[i].velocity.x = Math.cos(angle) * 10
+            coins[i].velocity.y = Math.sin(angle) * 10
+        }else if(coins[i].spawnTime <= 0){
+            coins[i].velocity.x = 0
+            coins[i].velocity.y = 0
+        }
+
+        if(circleCircle(coins[i].position.x, coins[i].position.y, player.position.x, player.position.y, 5, player.hitBoxSize))
+        {
+            coinsNumber++;
+            coins.splice(i, 1);
+        }
+    }
+}
+
 function animateBullets(){
     for(let i = 0; i < bullets.length; i++)
     {   
-        let flag = false;
         bullets[i].update();
-        for(let x = 0; x<x_tileNum; x++){ 
-            for(let y = 0; y<y_tileNum; y++){
-                if(tileMap[x][y].walkable == false){
-                    let collision = circleRect(bullets[i].position.x, bullets[i].position.y, 5, 
-                        tileMap[x][y].x * tileSize, tileMap[x][y].y * tileSize - tileSize, tileMap[x][y].width, tileMap[x][y].height)
-                    if(collision){
-                        flag = true;
-                    }
-                } 
-            }
-        }
-        
-        if(bullets[i].position.x < xShift/4 * tileSize ||
-            bullets[i].position.y < yShift/4 * tileSize || 
-            bullets[i].position.x > canvas.width - xShift/4 * tileSize ||
-            bullets[i].position.y > canvas.height - yShift/4 * tileSize){
-                flag = true
-            }
-        if(flag){
-            for(let j = 0;j < 10;j++){
-                let color = 'white'
-                if(bullets[i].image == playerBulletImg) color = "orange"
-                else color = "red"
-
-                particles.push(new Particle(bullets[i].position.x, bullets[i].position.y,
-                    5, color,
-                    {x:(Math.random() - 0.5)*15, y:(Math.random() - 0.5)*15}))
-            }
-            bullets.splice(i,1); 
-        }
+        bullets[i].collision(i);
     }
 }
 
@@ -176,6 +172,9 @@ function animateTileMap(){
     for(let i = 0;i<enemies.length; i++){
         enemies[i].drawed = false;
     }
+    for(let i = 0;i<coins.length; i++){
+        coins[i].drawed = false;
+    }
 
     for(let x = 0; x<y_tileNum+2; x++){
         for(let y = 0; y<x_tileNum; y++){
@@ -183,15 +182,20 @@ function animateTileMap(){
                 tileMap[y][x].draw()
             }
         }
-        renderOnMap(player, x);
-        
-        for(let i = 0;i<bullets.length; i++){
-            renderOnMap(bullets[i], x);
+        for(let i = 0;i<coins.length; i++){
+            renderOnMap(coins[i], x)
         }
+
+        renderOnMap(player, x);
 
         for(let i = 0;i<enemies.length; i++){
             renderOnMap(enemies[i], x)
         }
+
+        for(let i = 0;i<bullets.length; i++){
+            renderOnMap(bullets[i], x);
+        }
+
         for(let i = 0;i<particles.length; i++){
             renderOnMap(particles[i], x)
         }

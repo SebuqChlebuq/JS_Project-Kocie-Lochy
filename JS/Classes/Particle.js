@@ -1,7 +1,7 @@
 const friction = 0.9;
 
 class Particle{
-    constructor(x,y,radius,color,velocity){
+    constructor(x,y,radius,color,velocity, vanishing){
         this.position = {
             x: x,
             y: y
@@ -16,8 +16,12 @@ class Particle{
         this.velocity = velocity;
         this.alpha = 1;
         this.drawed = false;
+        this.vanishing = vanishing;
     }
     draw(){
+        c.shadowOffsetX = 5;
+        c.shadowOffsetY = 5;
+
         c.save();
         c.globalAlpha = this.alpha;
         c.beginPath();
@@ -25,12 +29,15 @@ class Particle{
         c.fillStyle = this.color;
         c.fill();
         c.restore();
+    
+        c.shadowOffsetX = 0;
+        c.shadowOffsetY = 0;
     }
     update(){
         this.velocity.x *= friction;
         this.velocity.y *= friction;
         this.updatePosition.x += this.velocity.x;
         this.updatePosition.y += this.velocity.y;
-        this.alpha -= 0.05;
+        this.alpha -= this.vanishing;
     }
 }
