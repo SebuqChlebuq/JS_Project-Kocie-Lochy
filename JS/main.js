@@ -178,7 +178,7 @@ function dead()
     c.font = "150px Impact";
 
     c.fillText("UMARŁEŚ...", canvas.width/2 - 300, textY);
-    if(textY < canvas.height/2)
+    if(textY < canvas.height/2 + 50)
     {
         textY += textV;
         textV += 0.05;

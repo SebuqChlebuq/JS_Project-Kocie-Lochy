@@ -31,9 +31,15 @@ function animatePlayer(){
                     particles = [];
                     coins = [];
                     bullets = [];
-                    
-                    enemies.push(new Enemy(200,400));
-                    enemies.push(new Enemy(900,400));
+
+                    for(let y = 0; y<5; y++){
+                        tileMap[3][4+y].walkable = false
+                    }
+                    for(let y = 0; y<5; y++){
+                        tileMap[12][4+y].walkable = false
+                    }
+                    enemies.push(new Enemy(canvas.width/6,canvas.height/2));
+                    enemies.push(new Enemy(canvas.width/6*5,canvas.height/2));
             }
         }
     }
@@ -95,7 +101,7 @@ function renderOnMap(object, tileY){
     if(object.speed){
         speed = object.speed;
     }
-    if(!object.drawed && object.position.y - object.velocity.y * speed + object.hitBoxSize - 5 <= (tileY + yShift/2)*tileSize){
+    if(!object.drawed && object.position.y - object.velocity.y * speed + object.hitBoxSize - 40 <= (tileY + yShift/2)*tileSize){
         object.drawed = true;
         object.draw();
     }
