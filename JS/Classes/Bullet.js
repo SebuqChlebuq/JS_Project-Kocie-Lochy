@@ -88,6 +88,10 @@ class Bullet{
 
                         enemies.splice(e, 1);
                     }
+                    if(enemies.length == 0)
+                    {
+                        roomClosed = false;
+                    }
 
                     flag = true;   
                 }
@@ -111,10 +115,10 @@ class Bullet{
                 player.pushVelocity = {x: this.velocity.x * 10, y:this.velocity.y * 10}
                 player.health -= 1;
                 if(player.health == 0){
-                    setInterval(function(){
                         cancelAnimationFrame(animationId);
-                        //UMIERANIE, enemisy znikaja i kot uemira jakos ladniw w samotnosci
-                    }, 100)
+
+                        transisionOpacity = 0;
+                        dead()
                 }
                 flag = true;   
             }

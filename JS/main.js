@@ -25,15 +25,12 @@ const keys = {
     a: false,
     d: false
 };
-const bullets = [];
+let bullets = [];
 const tileMap = [];
 const enemies = [];
-const particles = [];
-const coins = [];
-
-enemies.push(new Enemy(200,400));
-enemies.push(new Enemy(900,400));
-
+let particles = [];
+let coins = [];
+const doors = [];
 
 function Distance(a,b){
     return Math.sqrt( Math.pow(a,2) + Math.pow(b,2))
@@ -82,6 +79,19 @@ const coinImg = new Sprite("Img/Coin.png");
 const enemyMarkImg = new Sprite("Img/EnemyMark.png");
 const innerCloseDoorImg = new Sprite("Img/closeDoor.png")
 
+let roomClosed = false;
+let doorPush = 1;
+
+doors.push(new Door((x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2 - tileSize/2, yShift/2 * tileSize/2 - yShift/2 * tileSize/4,
+    tileSize, yShift/2 * tileSize/2));
+doors.push(new Door((x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2 - tileSize/2, (y_tileNum + yShift/2) * tileSize + yShift/2 * tileSize/2 - yShift/2 * tileSize/4,
+    tileSize, yShift/2 * tileSize/2));
+
+doors.push(new Door(xShift/2*tileSize/2 -yShift/2 * tileSize/4, y_tileNum/2 * tileSize + yShift*tileSize/2 - tileSize/2,
+    yShift/2 * tileSize/2, tileSize));
+doors.push(new Door((x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2 -yShift/2 * tileSize/4, y_tileNum/2 * tileSize + yShift*tileSize/2 - tileSize/2,
+    yShift/2 * tileSize/2, tileSize));
+
 function setTileMap(){
     for(let x = 0; x<x_tileNum; x++){   
         tileMap[x] = {}
@@ -89,19 +99,10 @@ function setTileMap(){
             tileMap[x][y] = new Tile(x + xShift/2, y + yShift/2, tileSize, tileSize, true);
         }
     }
-
-    
-    
-    for(let y = 0; y<5; y++){
-        tileMap[12][4+y].walkable = false
-    }
-    for(let y = 0; y<5; y++){
-        tileMap[3][4+y].walkable = false
-    }
-   
 }
 
 let coinsNumber = 0;
+let transisionOpacity = 1;
 
 function drawMenu(){
     c.shadowColor = 'black'
@@ -131,6 +132,7 @@ function drawMenu(){
     c.shadowOffsetX = 0;
     c.shadowOffsetY = 0;
 }
+
 let animationId;
 function animate(){
     animationId = requestAnimationFrame(animate);
@@ -150,8 +152,35 @@ function animate(){
     animateTileMap();
 
     drawMenu();
+
+    c.fillStyle = "rgb(0,0,0,"+transisionOpacity+")";
+    c.fillRect(0,0, canvas.width, canvas.height);
+    transisionOpacity -= 0.02;
 }
 
 c.imageSmoothingEnabled = false;
 setTileMap();
 animate();
+
+let textY = -100;
+let textV = 0.1;
+
+function dead()
+{
+    animationId = requestAnimationFrame(dead)
+
+    c.fillStyle = "rgb(0,0,0,"+transisionOpacity+")";
+    c.fillRect(0,0, canvas.width, canvas.height);
+    if(transisionOpacity < 1){
+        transisionOpacity += 0.001;
+    }
+    c.fillStyle = 'rgb(255,255,255,1)'
+    c.font = "150px Impact";
+
+    c.fillText("UMARŁEŚ...", canvas.width/2 - 300, textY);
+    if(textY < canvas.height/2)
+    {
+        textY += textV;
+        textV += 0.05;
+    }
+}

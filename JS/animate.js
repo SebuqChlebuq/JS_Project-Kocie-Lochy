@@ -8,7 +8,36 @@ function animatePlayer(){
     else if (keys.w ) player.velocity.y = -5;
     player.rad = Math.atan2(mouse.y - player.position.y,
                          mouse.x - player.position.x);
+    //console.log(player.velocity);
 
+    for(let d = 0;d<doors.length; d++)
+    {
+        if(!roomClosed)
+        {
+            if(circleRect(player.position.x, player.position.y, player.hitBoxSize, 
+                doors[d].x, doors[d].y, doors[d].width, doors[d].height)){
+                    let ySh = 20
+                    if(player.position.y < canvas.height/2) ySh = -ySh
+                    let xSh = 20
+                    if(player.position.x < canvas.width/2) xSh = -xSh
+
+                    player.position.y = canvas.height - player.position.y + ySh
+                    player.position.x = canvas.width - player.position.x + xSh
+
+                    roomClosed = true
+                    doorPush = 1;
+                    transisionOpacity = 1;
+
+                    particles = [];
+                    coins = [];
+                    bullets = [];
+                    
+                    enemies.push(new Enemy(200,400));
+                    enemies.push(new Enemy(900,400));
+            }
+        }
+    }
+    
     player.update();
 }
 
@@ -91,29 +120,34 @@ function place(object,rotate, translateX, translateY, width, height){
 
 function animateTileMap(){
     {
+    if(!roomClosed && doorPush < 50)
+    {
+        doorPush*=1.2;
+    }
+
     place(innerCloseDoorImg, 0,
-        (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, yShift/2 * tileSize/2,
+        (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, yShift/2 * tileSize/2 - doorPush,
         tileSize*2 - 40, yShift/2 * tileSize - 20)
     place(doorImg, 0,
         (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, yShift/2 * tileSize/2,
         tileSize*2, yShift/2 * tileSize)
     
     place(innerCloseDoorImg, Math.PI,
-        (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, (y_tileNum + yShift/2) * tileSize + yShift/2 * tileSize/2,
+        (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, (y_tileNum + yShift/2) * tileSize + yShift/2 * tileSize/2 + doorPush,
         tileSize*2 - 40, yShift/2 * tileSize - 20)
     place(doorImg, Math.PI,
         (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, (y_tileNum + yShift/2) * tileSize + yShift/2 * tileSize/2,
        tileSize*2, yShift/2 * tileSize)
     
     place(innerCloseDoorImg, -Math.PI/2,
-        xShift/2*tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
+        xShift/2*tileSize/2 - doorPush, y_tileNum/2 * tileSize + yShift*tileSize/2,
         tileSize*2-40, xShift/2 * tileSize-20)
     place(doorImg, -Math.PI/2,
         xShift/2*tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
         tileSize*2, xShift/2 * tileSize)
     
     place(innerCloseDoorImg, Math.PI/2,
-        (x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
+        (x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2 + doorPush, y_tileNum/2 * tileSize + yShift*tileSize/2,
         tileSize*2-40, xShift/2 * tileSize-20)
     place(doorImg, Math.PI/2,
         (x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
