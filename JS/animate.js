@@ -91,18 +91,30 @@ function place(object,rotate, translateX, translateY, width, height){
 
 function animateTileMap(){
     {
+    place(innerCloseDoorImg, 0,
+        (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, yShift/2 * tileSize/2,
+        tileSize*2 - 40, yShift/2 * tileSize - 20)
     place(doorImg, 0,
         (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, yShift/2 * tileSize/2,
         tileSize*2, yShift/2 * tileSize)
-
+    
+    place(innerCloseDoorImg, Math.PI,
+        (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, (y_tileNum + yShift/2) * tileSize + yShift/2 * tileSize/2,
+        tileSize*2 - 40, yShift/2 * tileSize - 20)
     place(doorImg, Math.PI,
         (x_tileNum+xShift/2) * tileSize/2 + xShift/2 * tileSize/2, (y_tileNum + yShift/2) * tileSize + yShift/2 * tileSize/2,
        tileSize*2, yShift/2 * tileSize)
     
+    place(innerCloseDoorImg, -Math.PI/2,
+        xShift/2*tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
+        tileSize*2-40, xShift/2 * tileSize-20)
     place(doorImg, -Math.PI/2,
         xShift/2*tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
         tileSize*2, xShift/2 * tileSize)
     
+    place(innerCloseDoorImg, Math.PI/2,
+        (x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
+        tileSize*2-40, xShift/2 * tileSize-20)
     place(doorImg, Math.PI/2,
         (x_tileNum+xShift/2) * tileSize + xShift/2 * tileSize/2, y_tileNum/2 * tileSize + yShift*tileSize/2,
         tileSize*2, xShift/2 * tileSize)

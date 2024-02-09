@@ -52,8 +52,8 @@ class Enemy{
         if(this.shootDelay < 1){
             this.shootDelay = this.setShootDelay
             let velocity = {
-                x: Math.cos(this.rad + (Math.random()- 0.5)/2),
-                y: Math.sin(this.rad + (Math.random() - 0.5)/2)
+                x: Math.cos(this.rad),
+                y: Math.sin(this.rad)
             }
             let speed = 15;
             let x = this.position.x + this.gunPosition.x + velocity.x * this.gunSize.width/2;

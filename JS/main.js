@@ -2,7 +2,7 @@ const tileSize = 60;
 const x_tileNum = 16;
 const y_tileNum = 10;
 
-const xShift = 2.4
+const xShift = 3
 const yShift = 3
 
 const canvas = document.querySelector("canvas");
@@ -31,8 +31,9 @@ const enemies = [];
 const particles = [];
 const coins = [];
 
-enemies.push(new Enemy(660,400));
-enemies.push(new Enemy(800,600));
+enemies.push(new Enemy(200,400));
+enemies.push(new Enemy(900,400));
+
 
 function Distance(a,b){
     return Math.sqrt( Math.pow(a,2) + Math.pow(b,2))
@@ -79,6 +80,7 @@ const cornerImg = new Sprite("Img/Corner.png");
 const heartImg = new Sprite("Img/Heart.png");
 const coinImg = new Sprite("Img/Coin.png");
 const enemyMarkImg = new Sprite("Img/EnemyMark.png");
+const innerCloseDoorImg = new Sprite("Img/closeDoor.png")
 
 function setTileMap(){
     for(let x = 0; x<x_tileNum; x++){   
@@ -88,15 +90,13 @@ function setTileMap(){
         }
     }
 
-    for(let x = 0; x<3; x++){
-        tileMap[2+x][8].walkable = false
-    }
+    
     
     for(let y = 0; y<5; y++){
-        tileMap[8][4+y].walkable = false
+        tileMap[12][4+y].walkable = false
     }
-    for(let x = 0; x<3; x++){
-        tileMap[5+x][4].walkable = false
+    for(let y = 0; y<5; y++){
+        tileMap[3][4+y].walkable = false
     }
    
 }

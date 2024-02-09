@@ -1,8 +1,8 @@
 class Player{
     constructor(){
         this.position = {
-            x: 150,
-            y: 200
+            x: 600,
+            y: 400
         };
         this.velocity = {
             x: 0,
