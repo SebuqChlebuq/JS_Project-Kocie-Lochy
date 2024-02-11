@@ -1,6 +1,6 @@
 window.addEventListener('keydown', (event) => {
     //console.log(event);
-    switch (event.key){
+    switch (event.key.toLowerCase()){
         case 'w':
             keys.w = true;
             break
@@ -17,7 +17,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('keyup', (event) => {
-    switch (event.key){
+    switch (event.key.toLowerCase()){
         case 'w':
             keys.w = false;
             break

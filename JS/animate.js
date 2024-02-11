@@ -31,15 +31,12 @@ function animatePlayer(){
                     particles = [];
                     coins = [];
                     bullets = [];
-
-                    for(let y = 0; y<5; y++){
-                        tileMap[3][4+y].walkable = false
-                    }
-                    for(let y = 0; y<5; y++){
-                        tileMap[12][4+y].walkable = false
-                    }
-                    enemies.push(new Enemy(canvas.width/6,canvas.height/2));
-                    enemies.push(new Enemy(canvas.width/6*5,canvas.height/2));
+                    inRoom++;
+                    
+                    const room = roomTypes[Math.floor(Math.random() * roomTypes.length)];
+                    clearTileMap();
+                    room.walls();
+                    room.enemies();
             }
         }
     }
@@ -103,6 +100,22 @@ function renderOnMap(object, tileY){
     }
     if(!object.drawed && object.position.y - object.velocity.y * speed + object.hitBoxSize - 40 <= (tileY + yShift/2)*tileSize){
         object.drawed = true;
+        if(object instanceof Player){
+            if(inRoom == 0)
+    {
+            c.fillStyle = 'rgb(255,255,255,0.2)'
+            c.font = "30px Impact";
+
+            const xP = canvas.width/2 - 450
+            const yP = canvas.height/2 - 250
+
+            c.fillText("Jestes kotem uwięzionym w szczurzym lochu,", xP, yP);
+            c.fillText("nie masz szans na przeżycie.", xP, yP + 40);
+            c.fillText("Ale pozabiajj ich jak najwięcej.", xP, yP + 80);
+            c.fillText("WSAD - poruszanie.", xP, yP + 120);
+            c.fillText("Left click - strzał.", xP, yP + 160);
+    }
+        }
         object.draw();
     }
 }
